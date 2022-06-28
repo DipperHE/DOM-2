@@ -4,12 +4,12 @@
 //   .addClass("blue")
 //   .addClass("green"); //链式操作
 // 以上代码可简写成下条代码
-$(".test1").addClass("red").addClass("blue").addClass("green");
+jQuery(".test1").addClass("red").addClass("blue").addClass("green");
 
-$(".test1").find(".child").addClass("red");
-$(".test1").addClass("white");
+jQuery(".test1").find(".child").addClass("red");
+jQuery(".test1").addClass("white");
 
-$(".test1").find(".child").addClass("red").end().addClass("black");
+jQuery(".test1").find(".child").addClass("red").end().addClass("black");
 
 const x = jQuery(".test1").find(".child");
 x.each((div) => console.log(div));

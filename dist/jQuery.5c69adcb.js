@@ -117,29 +117,132 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-})({"main.js":[function(require,module,exports) {
-// const api = jQuery(".test"); // 不返回元素们，返回api对象
-// api
-//   .addClass("red") //遍历所有刚才获取的元素，添加.red
-//   .addClass("blue")
-//   .addClass("green"); //链式操作
-// 以上代码可简写成下条代码
-jQuery(".test1").addClass("red").addClass("blue").addClass("green");
-jQuery(".test1").find(".child").addClass("red");
-jQuery(".test1").addClass("white");
-jQuery(".test1").find(".child").addClass("red").end().addClass("black");
-var x = jQuery(".test1").find(".child");
-x.each(function (div) {
-  return console.log(div);
-});
-var y = jQuery(".test1");
-y.parent().print();
-var z = jQuery(".test1");
-z.children().print();
-var $div = $("<div><span>1</span></div>");
-$("body").append($div);
-var $childList = $(".child");
-$("body").append($childList);
+})({"jQuery.js":[function(require,module,exports) {
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+window.jQuery = function (selectorOrArrayOrTemplate) {
+  var elements;
+
+  if (typeof selectorOrArrayOrTemplate === "string") {
+    //     elements = document.querySelectorAll(selectorOrArray);
+    //   } else if (selectorOrArray instanceof Array) {
+    //     elements = selectorOrArray;
+    if (selectorOrArrayOrTemplate[0] === "<") {
+      // 创建 div
+      elements = [createElement(selectorOrArrayOrTemplate)];
+    } else {
+      // 查找 div
+      elements = document.querySelectorAll(selectorOrArrayOrTemplate);
+    }
+  } else if (selectorOrArrayOrTemplate instanceof Array) {
+    elements = selectorOrArrayOrTemplate;
+  }
+
+  function createElement(string) {
+    var container = document.createElement("template");
+    container.innerHTML = string.trim();
+    return container.content.firstChild;
+  } // api 可以操作elements
+
+
+  return {
+    jquery: true,
+    elements: elements,
+    get: function get(index) {
+      return elements[index];
+    },
+    appendTo: function appendTo(node) {
+      if (node instanceof Element) {
+        this.each(function (el) {
+          return node.appendChild(el);
+        }); // 遍历 elements，对每个 el 进行 node.appendChild 操作
+      } else if (node.jquery === true) {
+        this.each(function (el) {
+          return node.get(0).appendChild(el);
+        }); // 遍历 elements，对每个 el 进行 node.get(0).appendChild(el))  操作
+      }
+    },
+    append: function append(children) {
+      var _this = this;
+
+      if (children instanceof Element) {
+        this.get(0).appendChild(children);
+      } else if (children instanceof HTMLCollection) {
+        for (var i = 0; i < children.length; i++) {
+          this.get(0).appendChild(children[i]);
+        }
+      } else if (children.jquery === true) {
+        children.each(function (node) {
+          return _this.get(0).appendChild(node);
+        });
+      }
+    },
+    // 闭包：函数访问外部的变量
+    addClass: function addClass(className) {
+      for (var i = 0; i < elements.length; i++) {
+        elements[i].classList.add(className);
+      }
+
+      return this;
+    },
+    find: function find(selector) {
+      var array = [];
+
+      for (var i = 0; i < elements.length; i++) {
+        var elements2 = Array.from(elements[i].querySelectorAll(selector));
+        array = array.concat(elements2);
+      }
+
+      array.oldApi = this; // this是旧api
+
+      return jQuery(array);
+    },
+    oldApi: selectorOrArrayOrTemplate.oldApi,
+    end: function end() {
+      return this.oldApi; // this是新api
+    },
+    each: function each(fn) {
+      for (var i = 0; i < elements.length; i++) {
+        fn.call(null, elements[i], i);
+      }
+
+      return this;
+    },
+    parent: function parent() {
+      var array = [];
+      this.each(function (node) {
+        if (array.indexOf(node.parentNode) === -1) {
+          array.push(node.parentNode);
+        }
+      });
+      return jQuery(array);
+    },
+    children: function children() {
+      var array = [];
+      this.each(function (node) {
+        {
+          array.push.apply(array, _toConsumableArray(node.children));
+        }
+      });
+      return jQuery(array);
+    },
+    print: function print() {
+      console.log(elements);
+    }
+  };
+};
+
+window.$ = window.jQuery;
 },{}],"C:/Users/10231/AppData/Local/Yarn/Data/global/node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
@@ -343,5 +446,5 @@ function hmrAcceptRun(bundle, id) {
     return true;
   }
 }
-},{}]},{},["C:/Users/10231/AppData/Local/Yarn/Data/global/node_modules/parcel/src/builtins/hmr-runtime.js","main.js"], null)
-//# sourceMappingURL=/main.1f19ae8e.js.map
+},{}]},{},["C:/Users/10231/AppData/Local/Yarn/Data/global/node_modules/parcel/src/builtins/hmr-runtime.js","jQuery.js"], null)
+//# sourceMappingURL=/jQuery.5c69adcb.js.map

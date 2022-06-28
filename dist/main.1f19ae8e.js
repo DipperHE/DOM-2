@@ -124,10 +124,10 @@ parcelRequire = (function (modules, cache, entry, globalName) {
 //   .addClass("blue")
 //   .addClass("green"); //链式操作
 // 以上代码可简写成下条代码
-jQuery(".test1").addClass("red").addClass("blue").addClass("green");
-jQuery(".test1").find(".child").addClass("red");
-jQuery(".test1").addClass("white");
-jQuery(".test1").find(".child").addClass("red").end().addClass("black");
+$(".test1").addClass("red").addClass("blue").addClass("green");
+$(".test1").find(".child").addClass("red");
+$(".test1").addClass("white");
+$(".test1").find(".child").addClass("red").end().addClass("black");
 var x = jQuery(".test1").find(".child");
 x.each(function (div) {
   return console.log(div);
@@ -168,7 +168,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56864" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50276" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
